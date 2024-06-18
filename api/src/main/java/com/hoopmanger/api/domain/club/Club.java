@@ -35,7 +35,7 @@ public class Club {
 
     private String twitter;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User owner_id;
+    //@ManyToOne
+    //@JoinColumn(name = "owner_id", nullable = false)
+    private UUID owner_id;
 }
