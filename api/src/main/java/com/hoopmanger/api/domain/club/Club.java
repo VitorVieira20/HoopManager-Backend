@@ -1,6 +1,7 @@
 package com.hoopmanger.api.domain.club;
 
 import com.hoopmanger.api.domain.team.Team;
+import com.hoopmanger.api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,4 +34,8 @@ public class Club {
     private String facebook;
 
     private String twitter;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner_id;
 }

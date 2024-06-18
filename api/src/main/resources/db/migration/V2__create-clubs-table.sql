@@ -7,5 +7,10 @@ CREATE TABLE tb_clubs (
     email VARCHAR(150) NOT NULL,
     instagram VARCHAR(100),
     facebook VARCHAR(100),
-    twitter VARCHAR(100)
+    twitter VARCHAR(100),
+    owner_id UUID NOT NULL,
+        CONSTRAINT fk_user
+            FOREIGN KEY(owner_id)
+            REFERENCES tb_users(id)
+            ON DELETE CASCADE
 );
