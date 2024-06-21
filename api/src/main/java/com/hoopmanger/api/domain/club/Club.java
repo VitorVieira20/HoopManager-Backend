@@ -1,15 +1,11 @@
 package com.hoopmanger.api.domain.club;
 
-import com.hoopmanger.api.domain.team.Team;
-import com.hoopmanger.api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -35,7 +31,5 @@ public class Club {
 
     private String twitter;
 
-    //@ManyToOne
-    //@JoinColumn(name = "owner_id", nullable = false)
     private UUID owner_id;
 }
