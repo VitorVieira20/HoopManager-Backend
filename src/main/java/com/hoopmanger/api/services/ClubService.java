@@ -2,6 +2,7 @@ package com.hoopmanger.api.services;
 
 import com.hoopmanger.api.domain.club.Club;
 import com.hoopmanger.api.domain.club.ClubRequestDTO;
+import com.hoopmanger.api.domain.club.ClubUpdateRequestDTO;
 import com.hoopmanger.api.repositories.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,20 @@ public class ClubService {
         club.setInstagram( clubRequestDTO.instagram( ) );
         club.setTwitter( clubRequestDTO.twitter( ) );
         club.setFacebook( clubRequestDTO.facebook(  ));
+        return clubRepository.save( club );
+    }
+
+    public Club updateClub( UUID clubId, ClubUpdateRequestDTO clubUpdateRequestDTO ) {
+        Club club = clubRepository.findById( clubId ).orElse( null );
+        if (club == null) {
+            return null;
+        }
+        club.setName( clubUpdateRequestDTO.name( ) );
+        club.setEmail( clubUpdateRequestDTO.email( ) );
+        club.setPhone( clubUpdateRequestDTO.phone( ) );
+        club.setInstagram( clubUpdateRequestDTO.instagram( ) );
+        club.setTwitter( clubUpdateRequestDTO.twitter( ) );
+        club.setFacebook( clubUpdateRequestDTO.facebook( ) );
         return clubRepository.save( club );
     }
 }

@@ -2,6 +2,7 @@ package com.hoopmanger.api.controllers;
 
 import com.hoopmanger.api.domain.club.Club;
 import com.hoopmanger.api.domain.club.ClubRequestDTO;
+import com.hoopmanger.api.domain.club.ClubUpdateRequestDTO;
 import com.hoopmanger.api.services.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +39,19 @@ public class ClubController {
         }
     }
 
-    @PostMapping ( "/" )
+    @PostMapping( "/" )
     public ResponseEntity<Club> createClub( @Valid @RequestBody ClubRequestDTO clubRequestDTO ) {
         Club createdClub = clubService.createClub( clubRequestDTO );
         return ResponseEntity.ok( createdClub );
+    }
+
+    @PutMapping( "/{clubId}" )
+    public ResponseEntity<Club> updateClub( @PathVariable UUID clubId, @Valid @RequestBody ClubUpdateRequestDTO clubUpdateRequestDTO) {
+        Club updatedClub = clubService.updateClub( clubId, clubUpdateRequestDTO );
+        if ( updatedClub == null ) {
+            return ResponseEntity.notFound( ).build( );
+        } else {
+            return ResponseEntity.ok( updatedClub );
+        }
     }
 }
