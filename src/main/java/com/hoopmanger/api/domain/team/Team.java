@@ -23,7 +23,5 @@ public class Team {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "club_id", nullable = false)
-    private Club club;
+    private UUID club_id;
 }
