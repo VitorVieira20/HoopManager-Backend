@@ -1,15 +1,15 @@
 package com.hoopmanger.api.controllers;
 
 import com.hoopmanger.api.domain.club.Club;
+import com.hoopmanger.api.domain.club.ClubRequestDTO;
 import com.hoopmanger.api.domain.team.Team;
+import com.hoopmanger.api.domain.team.TeamRequestDTO;
 import com.hoopmanger.api.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,5 +28,11 @@ public class TeamController {
         } else {
             return ResponseEntity.ok( teams );
         }
+    }
+
+    @PostMapping( "/" )
+    public ResponseEntity<Team> createTeam( @Valid @RequestBody TeamRequestDTO teamRequestDTO ) {
+        Team createdClub = teamService.createTeam( teamRequestDTO );
+        return ResponseEntity.ok( createdClub );
     }
 }
