@@ -48,4 +48,13 @@ public class ClubService {
         club.setFacebook( clubUpdateRequestDTO.facebook( ) );
         return clubRepository.save( club );
     }
+
+    public boolean deleteClub(UUID clubId) {
+        if (clubRepository.existsById(clubId)) {
+            clubRepository.deleteById(clubId);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

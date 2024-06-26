@@ -54,4 +54,14 @@ public class ClubController {
             return ResponseEntity.ok( updatedClub );
         }
     }
+
+    @DeleteMapping("/{clubId}")
+    public ResponseEntity<Void> deleteClub(@PathVariable UUID clubId) {
+        boolean deleted = clubService.deleteClub(clubId);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
