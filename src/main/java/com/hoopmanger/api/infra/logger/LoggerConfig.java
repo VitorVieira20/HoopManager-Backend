@@ -12,7 +12,7 @@ public class LoggerConfig implements WebMvcConfigurer {
     private RequestLoggingInterceptor requestLoggingInterceptor;
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(requestLoggingInterceptor);
+    public void addInterceptors( InterceptorRegistry registry ) {
+        registry.addInterceptor( requestLoggingInterceptor );
     }
 }
