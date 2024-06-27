@@ -1,8 +1,5 @@
 package com.hoopmanger.api.services;
 
-import com.hoopmanger.api.domain.club.Club;
-import com.hoopmanger.api.domain.club.ClubRequestDTO;
-import com.hoopmanger.api.domain.club.ClubUpdateRequestDTO;
 import com.hoopmanger.api.domain.team.Team;
 import com.hoopmanger.api.domain.team.TeamRequestDTO;
 import com.hoopmanger.api.domain.team.TeamUpdateRequestDTO;

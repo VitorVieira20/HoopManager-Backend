@@ -1,8 +1,5 @@
 package com.hoopmanger.api.controllers;
 
-import com.hoopmanger.api.domain.club.Club;
-import com.hoopmanger.api.domain.club.ClubRequestDTO;
-import com.hoopmanger.api.domain.club.ClubUpdateRequestDTO;
 import com.hoopmanger.api.domain.team.Team;
 import com.hoopmanger.api.domain.team.TeamRequestDTO;
 import com.hoopmanger.api.domain.team.TeamUpdateRequestDTO;
@@ -44,8 +41,8 @@ public class TeamController {
 
     @PostMapping( "/" )
     public ResponseEntity<Team> createTeam( @Valid @RequestBody TeamRequestDTO teamRequestDTO ) {
-        Team createdClub = teamService.createTeam( teamRequestDTO );
-        return ResponseEntity.ok( createdClub );
+        Team createdTeam = teamService.createTeam( teamRequestDTO );
+        return ResponseEntity.ok( createdTeam );
     }
 
     @PutMapping( "/{teamId}" )
