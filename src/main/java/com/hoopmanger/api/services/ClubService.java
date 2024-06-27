@@ -49,9 +49,9 @@ public class ClubService {
         return clubRepository.save( club );
     }
 
-    public boolean deleteClub(UUID clubId) {
-        if (clubRepository.existsById(clubId)) {
-            clubRepository.deleteById(clubId);
+    public boolean deleteClub( UUID clubId ) {
+        if (clubRepository.existsById( clubId ) ) {
+            clubRepository.deleteById( clubId );
             return true;
         } else {
             return false;
