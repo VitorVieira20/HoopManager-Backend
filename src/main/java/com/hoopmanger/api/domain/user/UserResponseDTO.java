@@ -2,5 +2,9 @@ package com.hoopmanger.api.domain.user;
 
 import java.util.UUID;
 
-public record UserResponseDTO( UUID id, String title, String email, String password ) {
+public record UserResponseDTO(
+        UUID id,
+        String name,
+        String email
+) {
 }

@@ -4,23 +4,23 @@ import com.hoopmanger.api.domain.user.UserResponseDTO;
 import com.hoopmanger.api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping( "/api/user" )
 public class UserController {
 
-    //@Autowired
-    //private UserService userService;
+    @Autowired
+    private UserService userService;
 
-    @GetMapping
-    public ResponseEntity/*<UserResponseDTO>*/ getEvents(){
-        //UserResponseDTO user = this.userService.getUser();
-        return ResponseEntity.ok("Sucesso");
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById( @PathVariable UUID id ) {
+        Optional<UserResponseDTO> user = userService.getUserById( id );
+        return user.map( ResponseEntity::ok )
+                .orElseGet( ( ) -> ResponseEntity.notFound( ).build( ) );
     }
 }
