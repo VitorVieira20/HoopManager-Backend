@@ -39,16 +39,6 @@ public class ClubController {
         }
     }
 
-    @GetMapping( "/team/{teamId}" )
-    public ResponseEntity<Club> getClubByTeamId( @PathVariable UUID teamId ) {
-        Club club = clubService.getClubByTeamId( teamId );
-        if ( club == null ) {
-            return ResponseEntity.noContent( ).build( );
-        } else {
-            return ResponseEntity.ok( club );
-        }
-    }
-
     @PostMapping( "/" )
     public ResponseEntity<Club> createClub( @Valid @RequestBody ClubRequestDTO clubRequestDTO ) {
         Club createdClub = clubService.createClub( clubRequestDTO );

@@ -23,10 +23,6 @@ public class ClubService {
         return clubRepository.findClubsByOwnerId( ownerId );
     }
 
-    public Club getClubByTeamId( UUID teamId ) {
-        return clubRepository.getClubByTeamId( teamId );
-    }
-
     public Club createClub( ClubRequestDTO clubRequestDTO ) {
         Club club = new Club ( );
         club.setOwner_id( clubRequestDTO.owner_id( ) );
