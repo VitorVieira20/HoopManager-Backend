@@ -2,6 +2,9 @@ package com.hoopmanger.api.controllers;
 
 import com.hoopmanger.api.domain.player.Player;
 import com.hoopmanger.api.domain.player.PlayerRequestDTO;
+import com.hoopmanger.api.domain.player.PlayerUpdateRequestDTO;
+import com.hoopmanger.api.domain.team.Team;
+import com.hoopmanger.api.domain.team.TeamUpdateRequestDTO;
 import com.hoopmanger.api.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,16 @@ public class PlayerController {
     @Autowired
     PlayerService playerService;
 
+    @GetMapping( "/{playerId}" )
+    public ResponseEntity<Player> getPlayerById( @PathVariable UUID playerId ) {
+        Player player = playerService.getPlayerById( playerId );
+        if ( player == null ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( player );
+        }
+    }
+
     @GetMapping( "/team/{teamId}" )
     public ResponseEntity<List<Player>> getPlayersByTeamId( @PathVariable UUID teamId ) {
         List<Player> players = playerService.getPlayersByTeamId( teamId );
@@ -32,5 +45,25 @@ public class PlayerController {
     public ResponseEntity<Player> createPlayer( @Valid @RequestBody PlayerRequestDTO playerRequestDTO ) {
         Player createdPlayer = playerService.createPlayer( playerRequestDTO );
         return ResponseEntity.ok( createdPlayer );
+    }
+
+    @PutMapping( "/{playerId}" )
+    public ResponseEntity<Player> updatePlayer( @PathVariable UUID playerId, @Valid @RequestBody PlayerUpdateRequestDTO playerUpdateRequestDTO) {
+        Player updatedPlayer = playerService.updatePlayer( playerId, playerUpdateRequestDTO );
+        if ( updatedPlayer == null ) {
+            return ResponseEntity.notFound( ).build( );
+        } else {
+            return ResponseEntity.ok( updatedPlayer );
+        }
+    }
+
+    @DeleteMapping("/{playerId}")
+    public ResponseEntity<Void> deletePlayer( @PathVariable UUID playerId ) {
+        boolean deleted = playerService.deletePlayer( playerId );
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
