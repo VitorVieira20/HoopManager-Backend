@@ -36,10 +36,8 @@ public class Game {
 
     private String location;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
-    private Team team_id;
+    private UUID team_id;
 
-    @OneToMany
-    private Set<GameInfo> infos;
+    //@OneToMany
+    //private Set<GameInfo> infos;
 }
