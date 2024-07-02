@@ -22,6 +22,12 @@ public class PlayerService {
     public List<Player> getPlayersByTeamId( UUID teamId ) {
         return playerRepository.findPlayersByTeamId( teamId );
     }
+    public List<Player> getPlayersByGameId( UUID gameId ) {
+        return playerRepository.findPlayersByGameId( gameId );
+    }
+    public List<Player> getRemainingPlayersFromGameInfoByGameId( UUID gameId ) {
+        return playerRepository.findRemainingPlayersFromGameInfoByGameId( gameId );
+    }
 
     public Player createPlayer( PlayerRequestDTO playerRequestDTO ) {
         Player player = new Player( );

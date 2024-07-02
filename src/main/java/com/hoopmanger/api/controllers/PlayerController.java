@@ -41,6 +41,26 @@ public class PlayerController {
         }
     }
 
+    @GetMapping( "/game/{gameId}" )
+    public ResponseEntity<List<Player>> getPlayersByGameId( @PathVariable UUID gameId ) {
+        List<Player> players = playerService.getPlayersByGameId( gameId );
+        if ( players.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( players );
+        }
+    }
+
+    @GetMapping( "/gameInfo/{gameId}" )
+    public ResponseEntity<List<Player>> getRemainingPlayersFromGameInfoByGameId( @PathVariable UUID gameId ) {
+        List<Player> players = playerService.getRemainingPlayersFromGameInfoByGameId( gameId );
+        if ( players.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( players );
+        }
+    }
+
     @PostMapping( "/" )
     public ResponseEntity<Player> createPlayer( @Valid @RequestBody PlayerRequestDTO playerRequestDTO ) {
         Player createdPlayer = playerService.createPlayer( playerRequestDTO );

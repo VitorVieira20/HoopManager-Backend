@@ -1,12 +1,8 @@
 package com.hoopmanger.api.controllers;
 
-import com.hoopmanger.api.domain.club.Club;
-import com.hoopmanger.api.domain.club.ClubRequestDTO;
-import com.hoopmanger.api.domain.club.ClubUpdateRequestDTO;
 import com.hoopmanger.api.domain.game.Game;
 import com.hoopmanger.api.domain.game.GameRequestDTO;
 import com.hoopmanger.api.domain.game.GameUpdateRequestDTO;
-import com.hoopmanger.api.domain.player.Player;
 import com.hoopmanger.api.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
