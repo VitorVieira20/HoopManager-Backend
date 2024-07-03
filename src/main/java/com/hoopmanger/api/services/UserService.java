@@ -16,6 +16,6 @@ public class UserService {
 
     public Optional<UserResponseDTO> getUserById( UUID id ) {
         return userRepository.findById( id )
-                .map( user -> new UserResponseDTO( user.getId( ), user.getName( ), user.getEmail( ) ) );
+                .map( user -> new UserResponseDTO( user.getId( ), user.getName( ), user.getEmail( ), user.getRole( ) ) );
     }
 }

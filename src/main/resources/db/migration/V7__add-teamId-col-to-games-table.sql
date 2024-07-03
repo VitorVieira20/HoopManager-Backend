@@ -1,8 +1,0 @@
-ALTER TABLE tb_games
-ADD COLUMN team_id UUID;
-
-ALTER TABLE tb_games
-ADD CONSTRAINT fk_team
-FOREIGN KEY (team_id)
-REFERENCES tb_teams(id)
-ON DELETE CASCADE;
