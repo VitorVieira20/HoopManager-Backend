@@ -28,6 +28,9 @@ public class PlayerService {
     public List<Player> getRemainingPlayersFromGameInfoByGameId( UUID gameId ) {
         return playerRepository.findRemainingPlayersFromGameInfoByGameId( gameId );
     }
+    public List<Player> getPlayersByOwnerId( UUID ownerId ) {
+        return playerRepository.findPlayersByOwnerId( ownerId );
+    }
 
     public Player createPlayer( PlayerRequestDTO playerRequestDTO ) {
         Player player = new Player( );

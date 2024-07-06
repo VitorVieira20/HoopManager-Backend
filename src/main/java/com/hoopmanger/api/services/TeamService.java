@@ -18,9 +18,11 @@ public class TeamService {
     public Team getTeamById( UUID teamId ) {
         return teamRepository.findTeamById( teamId );
     }
-
     public List<Team> getTeamsByClubId( UUID clubId ) {
         return teamRepository.findTeamsByClubId( clubId );
+    }
+    public List<Team> getTeamsByOwnerId( UUID ownerId ) {
+        return teamRepository.findTeamsByOwnerId( ownerId );
     }
 
     public Team createTeam(TeamRequestDTO teamRequestDTO ) {

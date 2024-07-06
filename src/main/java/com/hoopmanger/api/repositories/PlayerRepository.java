@@ -25,4 +25,7 @@ public interface PlayerRepository extends JpaRepository<Player, UUID> {
             "WHERE g.player_id IS NULL " +
             "AND p.team_id = (SELECT team_id FROM Game WHERE id = :gameId) " )
     List<Player> findRemainingPlayersFromGameInfoByGameId( @Param( "gameId" ) UUID gameId );
+
+    @Query( "SELECT p FROM Player p INNER JOIN Team t ON p.team_id = t.id INNER JOIN Club c ON t.club_id = c.id WHERE c.owner_id = :ownerId" )
+    List<Player> findPlayersByOwnerId( @Param( "ownerId" ) UUID ownerId );
 }

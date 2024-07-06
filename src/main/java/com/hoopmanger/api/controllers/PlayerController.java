@@ -41,6 +41,16 @@ public class PlayerController {
         }
     }
 
+    @GetMapping( "/owner/{ownerId}" )
+    public ResponseEntity<List<Player>> getPlayersByOwnerId( @PathVariable UUID ownerId ) {
+        List<Player> players = playerService.getPlayersByOwnerId( ownerId );
+        if ( players.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( players );
+        }
+    }
+
     @GetMapping( "/game/{gameId}" )
     public ResponseEntity<List<Player>> getPlayersByGameId( @PathVariable UUID gameId ) {
         List<Player> players = playerService.getPlayersByGameId( gameId );

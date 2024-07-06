@@ -22,6 +22,9 @@ public class GameService {
     public List<Game> getGamesByTeamId( UUID teamId ) {
         return gameRepository.findGamesByTeamId( teamId );
     }
+    public List<Game> getGamesByOwnerId( UUID ownerId ) {
+        return gameRepository.findGamesByOwnerId( ownerId );
+    }
 
     public Game createGame( GameRequestDTO gameRequestDTO ) {
         Game game = new Game( );

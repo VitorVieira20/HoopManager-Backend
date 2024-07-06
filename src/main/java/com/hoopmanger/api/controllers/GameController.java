@@ -39,6 +39,16 @@ public class GameController {
         }
     }
 
+    @GetMapping( "/owner/{ownerId}" )
+    public ResponseEntity<List<Game>> getGamesByOwnerId( @PathVariable UUID ownerId ) {
+        List<Game> games = gameService.getGamesByOwnerId( ownerId );
+        if ( games.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( games );
+        }
+    }
+
     @PostMapping( "/" )
     public ResponseEntity<Game> createGame( @Valid @RequestBody GameRequestDTO gameRequestDTO ) {
         Game createdGame = gameService.createGame( gameRequestDTO );

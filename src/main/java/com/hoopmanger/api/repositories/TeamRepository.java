@@ -16,4 +16,7 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 
     @Query( "SELECT t FROM Team t WHERE t.club_id = :clubId" )
     List<Team> findTeamsByClubId( @Param( "clubId" ) UUID ownerId );
+
+    @Query( "SELECT t FROM Team t INNER JOIN Club c On t.club_id = c.id WHERE c.owner_id = :ownerId" )
+    List<Team> findTeamsByOwnerId( @Param( "ownerId" ) UUID ownerId );
 }

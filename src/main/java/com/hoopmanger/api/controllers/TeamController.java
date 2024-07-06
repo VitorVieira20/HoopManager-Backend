@@ -39,6 +39,16 @@ public class TeamController {
         }
     }
 
+    @GetMapping( "/owner/{ownerId}" )
+    public ResponseEntity<List<Team>> getTeamsByOwnerId( @PathVariable UUID ownerId ) {
+        List<Team> teams = teamService.getTeamsByOwnerId( ownerId );
+        if ( teams.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( teams );
+        }
+    }
+
     @PostMapping( "/" )
     public ResponseEntity<Team> createTeam( @Valid @RequestBody TeamRequestDTO teamRequestDTO ) {
         Team createdTeam = teamService.createTeam( teamRequestDTO );
