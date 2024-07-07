@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -23,5 +25,16 @@ public class User {
     private String email;
 
     private String password;
+
     private String role;
+
+    private String plan;
+
+    private List<UUID> clubs;
+
+    private List<UUID> teams;
+
+    private List<UUID> games;
+
+    private List<UUID> athletes;
 }
