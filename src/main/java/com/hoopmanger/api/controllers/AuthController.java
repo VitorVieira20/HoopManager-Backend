@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping( "/api/auth" )
@@ -31,7 +33,18 @@ public class AuthController {
         User user = this.userRepository.findByEmail( body.email( ) ).orElseThrow( ( ) -> new RuntimeException( "User not found" ) );
         if( passwordEncoder.matches( body.password( ), user.getPassword( ) ) ) {
             String token = this.tokenService.generateToken( user );
-            return ResponseEntity.ok( new ResponseDTO( user.getName( ), user.getEmail( ), user.getId( ), token ) );
+            return ResponseEntity.ok( new ResponseDTO(
+                    user.getName( ),
+                    user.getEmail( ),
+                    user.getId( ),
+                    user.getRole( ),
+                    user.getPlan( ),
+                    user.getClubs( ),
+                    user.getTeams( ),
+                    user.getGames( ),
+                    user.getAthletes( ),
+                    token
+            ));
         }
         return ResponseEntity.badRequest( ).build( );
     }
@@ -46,10 +59,27 @@ public class AuthController {
             newUser.setPassword( passwordEncoder.encode( body.password( ) ) );
             newUser.setEmail( body.email( ) );
             newUser.setName( body.name( ) );
+            newUser.setRole( body.role( ) );
+            newUser.setPlan( body.plan( ) );
+            newUser.setClubs( new ArrayList<>() );
+            newUser.setTeams( new ArrayList<>() );
+            newUser.setGames( new ArrayList<>() );
+            newUser.setAthletes( new ArrayList<>() );
             this.userRepository.save( newUser );
 
             String token = this.tokenService.generateToken( newUser );
-            return ResponseEntity.ok( new ResponseDTO( newUser.getName( ), newUser.getEmail( ), newUser.getId( ), token ) );
+            return ResponseEntity.ok( new ResponseDTO(
+                    newUser.getName( ),
+                    newUser.getEmail( ),
+                    newUser.getId( ),
+                    newUser.getRole( ),
+                    newUser.getPlan( ),
+                    newUser.getClubs( ),
+                    newUser.getTeams( ),
+                    newUser.getGames( ),
+                    newUser.getAthletes( ),
+                    token
+            ) );
         }
         return ResponseEntity.badRequest().build();
     }
