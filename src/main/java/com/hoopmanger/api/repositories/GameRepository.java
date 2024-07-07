@@ -13,7 +13,7 @@ public interface GameRepository extends JpaRepository<Game, UUID> {
     @Query( "SELECT g FROM Game g WHERE g.id = :gameId" )
     Game findGameById( @Param( "gameId" ) UUID gameId );
 
-    @Query( "SELECT g FROM Game g WHERE g.team_id = :teamId" )
+    @Query( "SELECT g FROM Game g WHERE g.team_id = :teamId ORDER BY g.date" )
     List<Game> findGamesByTeamId( @Param( "teamId" ) UUID teamId );
 
     @Query( "SELECT g FROM Game g INNER JOIN Team t ON g.team_id = t.id INNER JOIN Club c ON t.club_id = c.id WHERE c.owner_id = :ownerId" )

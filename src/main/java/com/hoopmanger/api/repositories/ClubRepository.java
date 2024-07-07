@@ -13,6 +13,6 @@ public interface ClubRepository extends JpaRepository<Club, UUID> {
     @Query( "SELECT c FROM Club c WHERE c.id = :clubId" )
     Club findClubById( @Param( "clubId" ) UUID clubId );
 
-    @Query( "SELECT c FROM Club c WHERE c.owner_id = :ownerId" )
+    @Query( "SELECT c FROM Club c WHERE c.owner_id = :ownerId ORDER BY c.name" )
     List<Club> findClubsByOwnerId( @Param( "ownerId" ) UUID ownerId );
 }

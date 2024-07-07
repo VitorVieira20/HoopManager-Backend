@@ -13,7 +13,7 @@ public interface PlayerRepository extends JpaRepository<Player, UUID> {
     @Query( "SELECT p FROM Player p WHERE p.id = :playerId" )
     Player findPlayerById( @Param( "playerId" ) UUID playerId );
 
-    @Query( "SELECT p FROM Player p WHERE p.team_id = :teamId" )
+    @Query( "SELECT p FROM Player p WHERE p.team_id = :teamId ORDER BY p.name" )
     List<Player> findPlayersByTeamId( @Param( "teamId" ) UUID teamId );
 
     @Query( "SELECT p FROM Player p INNER JOIN Team t ON p.team_id = t.id INNER JOIN Game g ON t.id = g.team_id WHERE g.id = :gameId " )
