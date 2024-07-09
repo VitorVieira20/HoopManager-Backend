@@ -66,7 +66,7 @@ public class ClubController {
     }
 
     @PutMapping( "/{clubId}" )
-    public ResponseEntity<Club> updateClub( @PathVariable UUID clubId, @Valid @RequestBody ClubUpdateRequestDTO clubUpdateRequestDTO) {
+    public ResponseEntity<Club> updateClub( @PathVariable UUID clubId, @Valid @RequestBody ClubUpdateRequestDTO clubUpdateRequestDTO ) {
         Club updatedClub = clubService.updateClub( clubId, clubUpdateRequestDTO );
         if ( updatedClub == null ) {
             return ResponseEntity.notFound( ).build( );

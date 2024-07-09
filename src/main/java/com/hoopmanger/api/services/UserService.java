@@ -39,7 +39,15 @@ public class UserService {
         if ( user == null ) {
             return Optional.empty( );
         }
-        user.setClubs( userUpdateClubsRequestDTO.clubs( ) );
+
+        if ( userUpdateClubsRequestDTO.clubs( ) != null && !userUpdateClubsRequestDTO.clubs( ).isEmpty( ) ) {
+            user.setClubs( userUpdateClubsRequestDTO.clubs( ) );
+        }
+
+        if ( userUpdateClubsRequestDTO.teams( ) != null && !userUpdateClubsRequestDTO.teams( ).isEmpty( ) ) {
+            user.setTeams( userUpdateClubsRequestDTO.teams( ) );
+        }
+
         user = userRepository.save( user );
         return Optional.of( new UserResponseDTO(
                 user.getId( ),
