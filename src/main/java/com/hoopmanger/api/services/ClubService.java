@@ -3,7 +3,9 @@ package com.hoopmanger.api.services;
 import com.hoopmanger.api.domain.club.Club;
 import com.hoopmanger.api.domain.club.ClubRequestDTO;
 import com.hoopmanger.api.domain.club.ClubUpdateRequestDTO;
+import com.hoopmanger.api.domain.user.User;
 import com.hoopmanger.api.repositories.ClubRepository;
+import com.hoopmanger.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +17,25 @@ public class ClubService {
     @Autowired
     private ClubRepository clubRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public Club getClubById( UUID clubId ) {
         return clubRepository.findClubById( clubId );
     }
-
     public List<Club> getClubsByOwnerId( UUID ownerId ) {
         return clubRepository.findClubsByOwnerId( ownerId );
+    }
+    public List<Club> getClubsByName( String clubName ) {
+        return clubRepository.findClubsByName( clubName );
+    }
+    public List<Club> getUserFavoriteClubsByUserId( UUID userId ) {
+        User user = userRepository.findById( userId ).orElse( null );
+        if ( user != null && user.getClubs( ) != null ) {
+            return clubRepository.findUserFavoriteClubsByIds( user.getClubs( ) );
+        } else {
+            return List.of( );
+        }
     }
 
     public Club createClub( ClubRequestDTO clubRequestDTO ) {

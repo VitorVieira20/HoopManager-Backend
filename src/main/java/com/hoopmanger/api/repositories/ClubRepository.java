@@ -15,4 +15,10 @@ public interface ClubRepository extends JpaRepository<Club, UUID> {
 
     @Query( "SELECT c FROM Club c WHERE c.owner_id = :ownerId ORDER BY c.name" )
     List<Club> findClubsByOwnerId( @Param( "ownerId" ) UUID ownerId );
+
+    @Query( "SELECT c FROM Club c WHERE c.name ILIKE %:clubName%" )
+    List<Club> findClubsByName( @Param( "clubName" ) String clubName );
+
+    @Query( "SELECT c FROM Club c WHERE c.id IN :clubIds" )
+    List<Club> findUserFavoriteClubsByIds( @Param( "clubIds" ) List<UUID> clubIds );
 }

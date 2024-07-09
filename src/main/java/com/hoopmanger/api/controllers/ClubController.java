@@ -39,6 +39,26 @@ public class ClubController {
         }
     }
 
+    @GetMapping( "/name/{clubName}" )
+    public ResponseEntity<List<Club>> getClubsByName( @PathVariable String clubName ) {
+        List<Club> clubs = clubService.getClubsByName( clubName );
+        if ( clubs.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( clubs );
+        }
+    }
+
+    @GetMapping( "/favs/{userId}" )
+    public ResponseEntity<List<Club>> getUserFavoriteClubsByUserId( @PathVariable UUID userId ) {
+        List<Club> clubs = clubService.getUserFavoriteClubsByUserId( userId );
+        if ( clubs.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( clubs );
+        }
+    }
+
     @PostMapping( "/" )
     public ResponseEntity<Club> createClub( @Valid @RequestBody ClubRequestDTO clubRequestDTO ) {
         Club createdClub = clubService.createClub( clubRequestDTO );
