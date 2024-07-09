@@ -1,8 +1,10 @@
 package com.hoopmanger.api.controllers;
 
+import com.hoopmanger.api.domain.club.Club;
 import com.hoopmanger.api.domain.team.Team;
 import com.hoopmanger.api.domain.team.TeamRequestDTO;
 import com.hoopmanger.api.domain.team.TeamUpdateRequestDTO;
+import com.hoopmanger.api.domain.team.TeamWithClubDTO;
 import com.hoopmanger.api.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +22,8 @@ public class TeamController {
     private TeamService teamService;
 
     @GetMapping( "/{teamId}" )
-    public ResponseEntity<Team> getTeamById( @PathVariable UUID teamId ) {
-        Team team = teamService.getTeamById( teamId );
+    public ResponseEntity<TeamWithClubDTO> getTeamById( @PathVariable UUID teamId ) {
+        TeamWithClubDTO team = teamService.getTeamById( teamId );
         if ( team == null ) {
             return ResponseEntity.noContent( ).build( );
         } else {
@@ -42,6 +44,26 @@ public class TeamController {
     @GetMapping( "/owner/{ownerId}" )
     public ResponseEntity<List<Team>> getTeamsByOwnerId( @PathVariable UUID ownerId ) {
         List<Team> teams = teamService.getTeamsByOwnerId( ownerId );
+        if ( teams.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( teams );
+        }
+    }
+
+    @GetMapping( "/name/{teamName}" )
+    public ResponseEntity<List<TeamWithClubDTO>> getTeamsByName( @PathVariable String teamName ) {
+        List<TeamWithClubDTO> teams = teamService.getTeamsByName( teamName );
+        if ( teams.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( teams );
+        }
+    }
+
+    @GetMapping( "/favs/{userId}" )
+    public ResponseEntity<List<TeamWithClubDTO>> getUserFavoriteTeamsByUserId( @PathVariable UUID userId ) {
+        List<TeamWithClubDTO> teams = teamService.getUserFavoriteTeamsByUserId( userId );
         if ( teams.isEmpty( ) ) {
             return ResponseEntity.noContent( ).build( );
         } else {
