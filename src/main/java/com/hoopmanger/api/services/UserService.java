@@ -48,6 +48,10 @@ public class UserService {
             user.setTeams( userUpdateClubsRequestDTO.teams( ) );
         }
 
+        if ( userUpdateClubsRequestDTO.players( ) != null && !userUpdateClubsRequestDTO.players( ).isEmpty( ) ) {
+            user.setAthletes( userUpdateClubsRequestDTO.players( ) );
+        }
+
         user = userRepository.save( user );
         return Optional.of( new UserResponseDTO(
                 user.getId( ),

@@ -3,7 +3,11 @@ package com.hoopmanger.api.services;
 import com.hoopmanger.api.domain.player.Player;
 import com.hoopmanger.api.domain.player.PlayerRequestDTO;
 import com.hoopmanger.api.domain.player.PlayerUpdateRequestDTO;
+import com.hoopmanger.api.domain.player.PlayerWithClubAndTeamResponseDTO;
+import com.hoopmanger.api.domain.team.TeamWithClubDTO;
+import com.hoopmanger.api.domain.user.User;
 import com.hoopmanger.api.repositories.PlayerRepository;
+import com.hoopmanger.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +20,10 @@ public class PlayerService {
     @Autowired
     PlayerRepository playerRepository;
 
-    public Player getPlayerById( UUID playerId ) {
+    @Autowired
+    UserRepository userRepository;
+
+    public PlayerWithClubAndTeamResponseDTO getPlayerById( UUID playerId ) {
         return playerRepository.findPlayerById( playerId );
     }
     public List<Player> getPlayersByTeamId( UUID teamId ) {
@@ -30,6 +37,17 @@ public class PlayerService {
     }
     public List<Player> getPlayersByOwnerId( UUID ownerId ) {
         return playerRepository.findPlayersByOwnerId( ownerId );
+    }
+    public List<PlayerWithClubAndTeamResponseDTO> getPlayersByName( String playerName ) {
+        return playerRepository.findPlayersByName( playerName );
+    }
+    public List<PlayerWithClubAndTeamResponseDTO> getUserFavoritePlayersByUserId( UUID userId ) {
+        User user = userRepository.findById( userId ).orElse( null );
+        if ( user != null && user.getAthletes( ) != null ) {
+            return playerRepository.findUserFavoritePlayersByIds( user.getAthletes( ) );
+        } else {
+            return List.of( );
+        }
     }
 
     public Player createPlayer( PlayerRequestDTO playerRequestDTO ) {

@@ -3,8 +3,10 @@ package com.hoopmanger.api.controllers;
 import com.hoopmanger.api.domain.player.Player;
 import com.hoopmanger.api.domain.player.PlayerRequestDTO;
 import com.hoopmanger.api.domain.player.PlayerUpdateRequestDTO;
+import com.hoopmanger.api.domain.player.PlayerWithClubAndTeamResponseDTO;
 import com.hoopmanger.api.domain.team.Team;
 import com.hoopmanger.api.domain.team.TeamUpdateRequestDTO;
+import com.hoopmanger.api.domain.team.TeamWithClubDTO;
 import com.hoopmanger.api.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,8 @@ public class PlayerController {
     PlayerService playerService;
 
     @GetMapping( "/{playerId}" )
-    public ResponseEntity<Player> getPlayerById( @PathVariable UUID playerId ) {
-        Player player = playerService.getPlayerById( playerId );
+    public ResponseEntity<PlayerWithClubAndTeamResponseDTO> getPlayerById( @PathVariable UUID playerId ) {
+        PlayerWithClubAndTeamResponseDTO player = playerService.getPlayerById( playerId );
         if ( player == null ) {
             return ResponseEntity.noContent( ).build( );
         } else {
@@ -64,6 +66,26 @@ public class PlayerController {
     @GetMapping( "/gameInfo/{gameId}" )
     public ResponseEntity<List<Player>> getRemainingPlayersFromGameInfoByGameId( @PathVariable UUID gameId ) {
         List<Player> players = playerService.getRemainingPlayersFromGameInfoByGameId( gameId );
+        if ( players.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( players );
+        }
+    }
+
+    @GetMapping( "/name/{playerName}" )
+    public ResponseEntity<List<PlayerWithClubAndTeamResponseDTO>> getTeamsByName( @PathVariable String playerName ) {
+        List<PlayerWithClubAndTeamResponseDTO> players = playerService.getPlayersByName( playerName );
+        if ( players.isEmpty( ) ) {
+            return ResponseEntity.noContent( ).build( );
+        } else {
+            return ResponseEntity.ok( players );
+        }
+    }
+
+    @GetMapping( "/favs/{userId}" )
+    public ResponseEntity<List<PlayerWithClubAndTeamResponseDTO>> getUserFavoriteTeamsByUserId( @PathVariable UUID userId ) {
+        List<PlayerWithClubAndTeamResponseDTO> players = playerService.getUserFavoritePlayersByUserId( userId );
         if ( players.isEmpty( ) ) {
             return ResponseEntity.noContent( ).build( );
         } else {
