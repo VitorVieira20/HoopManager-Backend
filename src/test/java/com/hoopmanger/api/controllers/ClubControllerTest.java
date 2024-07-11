@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoopmanger.api.domain.club.Club;
 import com.hoopmanger.api.domain.club.ClubRequestDTO;
 import com.hoopmanger.api.domain.club.ClubUpdateRequestDTO;
+import com.hoopmanger.api.domain.user.User;
+import com.hoopmanger.api.domain.user.auth.LoginRequestDTO;
+import com.hoopmanger.api.domain.user.auth.ResponseDTO;
+import com.hoopmanger.api.infra.security.TokenTestService;
 import com.hoopmanger.api.services.ClubService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,10 +17,18 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -27,15 +39,16 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ClubController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ClubControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private ClubService clubService;
-
+    @MockBean
+    private TokenTestService tokenService;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -45,9 +58,10 @@ public class ClubControllerTest {
     private List<Club> clubs;
     private ClubRequestDTO clubRequestDTO;
     private ClubUpdateRequestDTO clubUpdateRequestDTO;
+    private String token;
 
     @BeforeEach
-    void setUp( ) {
+    void setUp() throws Exception {
         clubId = UUID.randomUUID( );
         ownerId = UUID.randomUUID( );
         club = new Club( );
@@ -64,6 +78,20 @@ public class ClubControllerTest {
         clubRequestDTO = new ClubRequestDTO( ownerId, "New Club", "newclub@example.com", 987654321, "new_instagram", "new_twitter", "new_facebook" );
 
         clubUpdateRequestDTO = new ClubUpdateRequestDTO( "Updated Club", "updatedclub@example.com", 1122334455, "updated_instagram", "updated_twitter", "updated_facebook" );
+
+        LoginRequestDTO loginRequestDTO = new LoginRequestDTO( "user1@gmail.com", "123" );
+        String loginRequestBody = objectMapper.writeValueAsString( loginRequestDTO );
+
+        mockMvc.perform( post( "/api/auth/login" )
+                        .contentType( MediaType.APPLICATION_JSON )
+                        .content( loginRequestBody ) )
+                .andExpect( status( ).isOk( ) )
+                .andExpect( jsonPath( "$.token" ).exists( ) )
+                .andDo( result -> {
+                    String responseBody = result.getResponse( ).getContentAsString( );
+                    ResponseDTO responseDTO = objectMapper.readValue( responseBody, ResponseDTO.class );
+                    token = responseDTO.token( );
+                });
     }
 
     @Test
@@ -71,7 +99,8 @@ public class ClubControllerTest {
     void testGetClubById( ) throws Exception {
         when( clubService.getClubById( clubId ) ).thenReturn( club );
 
-        mockMvc.perform( get("/api/club/{clubId}", clubId ) )
+        mockMvc.perform( get( "/api/club/{clubId}", clubId )
+                        .header( HttpHeaders.AUTHORIZATION, token ) )
                 .andExpect( status( ).isOk( ) )
                 .andExpect( jsonPath( "$.name" ).value( "Test Club" ) );
     }
@@ -79,9 +108,10 @@ public class ClubControllerTest {
     @Test
     @DisplayName( "Get Club Not Found by ID" )
     void testGetClubByIdNotFound( ) throws Exception {
-        when( clubService.getClubById( clubId ) ).thenReturn( null );
+        when(clubService.getClubById( clubId ) ).thenReturn( null );
 
-        mockMvc.perform( get( "/api/club/{clubId}", clubId ) )
+        mockMvc.perform( get ( "/api/club/{clubId}", clubId )
+                        .header( HttpHeaders.AUTHORIZATION, token ) )
                 .andExpect( status( ).isNoContent( ) );
     }
 
@@ -90,7 +120,8 @@ public class ClubControllerTest {
     void testGetClubsByOwnerId( ) throws Exception {
         when( clubService.getClubsByOwnerId( ownerId ) ).thenReturn( clubs );
 
-        mockMvc.perform( get( "/api/club/owner/{ownerId}", ownerId ) )
+        mockMvc.perform( get( "/api/club/owner/{ownerId}", ownerId )
+                        .header( HttpHeaders.AUTHORIZATION, token ) )
                 .andExpect( status( ).isOk( ) )
                 .andExpect( jsonPath( "$[0].name" ).value( "Test Club" ) );
     }
@@ -100,7 +131,8 @@ public class ClubControllerTest {
     void testGetClubsByOwnerIdNotFound( ) throws Exception {
         when( clubService.getClubsByOwnerId( ownerId ) ).thenReturn( Arrays.asList( ) );
 
-        mockMvc.perform( get( "/api/club/owner/{ownerId}", ownerId ) )
+        mockMvc.perform( get( "/api/club/owner/{ownerId}", ownerId )
+                        .header( HttpHeaders.AUTHORIZATION, token ) )
                 .andExpect( status( ).isNoContent( ) );
     }
 
@@ -111,7 +143,8 @@ public class ClubControllerTest {
 
         mockMvc.perform( post( "/api/club/" )
                         .contentType( MediaType.APPLICATION_JSON )
-                        .content( objectMapper.writeValueAsString( clubRequestDTO ) ) )
+                        .content( objectMapper.writeValueAsString( clubRequestDTO ) )
+                        .header( HttpHeaders.AUTHORIZATION, token ) )
                 .andExpect( status( ).isOk( ) )
                 .andExpect( jsonPath( "$.name" ).value( "Test Club" ) );
     }
@@ -123,19 +156,21 @@ public class ClubControllerTest {
 
         mockMvc.perform( put( "/api/club/{clubId}", clubId )
                         .contentType( MediaType.APPLICATION_JSON )
-                        .content( objectMapper.writeValueAsString( clubUpdateRequestDTO ) ) )
+                        .content( objectMapper.writeValueAsString( clubUpdateRequestDTO ) )
+                        .header( HttpHeaders.AUTHORIZATION, token ) )
                 .andExpect( status( ).isOk( ) )
                 .andExpect( jsonPath( "$.name" ).value( "Test Club" ) );
     }
 
     @Test
-    @DisplayName( "Club Not Found wile updating" )
+    @DisplayName( "Club Not Found while updating" )
     void testUpdateClubNotFound( ) throws Exception {
         when( clubService.updateClub( any( UUID.class ), any( ClubUpdateRequestDTO.class ) ) ).thenReturn( null );
 
-        mockMvc.perform( put("/api/club/{clubId}", clubId )
+        mockMvc.perform( put( "/api/club/{clubId}", clubId )
                         .contentType( MediaType.APPLICATION_JSON )
-                        .content( objectMapper.writeValueAsString( clubUpdateRequestDTO ) ) )
+                        .content( objectMapper.writeValueAsString( clubUpdateRequestDTO ) )
+                        .header( HttpHeaders.AUTHORIZATION, token ) )
                 .andExpect( status( ).isNotFound( ) );
     }
 
@@ -144,7 +179,8 @@ public class ClubControllerTest {
     void testDeleteClub( ) throws Exception {
         when( clubService.deleteClub( clubId ) ).thenReturn( true );
 
-        mockMvc.perform( delete( "/api/club/{clubId}", clubId ) )
+        mockMvc.perform( delete( "/api/club/{clubId}", clubId )
+                        .header( HttpHeaders.AUTHORIZATION, token ) )
                 .andExpect( status( ).isNoContent( ) );
     }
 
@@ -153,7 +189,8 @@ public class ClubControllerTest {
     void testDeleteClubNotFound( ) throws Exception {
         when( clubService.deleteClub( clubId ) ).thenReturn( false );
 
-        mockMvc.perform( delete( "/api/club/{clubId}", clubId ) )
+        mockMvc.perform( delete( "/api/club/{clubId}", clubId )
+                        .header( HttpHeaders.AUTHORIZATION, token ) )
                 .andExpect( status( ).isNotFound( ) );
     }
 }
