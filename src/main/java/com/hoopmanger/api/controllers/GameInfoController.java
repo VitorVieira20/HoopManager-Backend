@@ -24,7 +24,7 @@ public class GameInfoController {
     GameInfoService gameInfoService;
 
     @GetMapping( "/game/{gameId}" )
-    public ResponseEntity<List<GameInfoWithPlayerNameResponseDTO>> getGameInfoByGameId( @PathVariable UUID gameId) {
+    public ResponseEntity<List<GameInfoWithPlayerNameResponseDTO>> getGameInfoByGameId( @PathVariable UUID gameId ) {
         List<GameInfoWithPlayerNameResponseDTO> gameInfo = gameInfoService.getGameInfoWithPlayerName( gameId );
         if ( gameInfo.isEmpty( ) ) {
             return ResponseEntity.noContent( ).build( );
