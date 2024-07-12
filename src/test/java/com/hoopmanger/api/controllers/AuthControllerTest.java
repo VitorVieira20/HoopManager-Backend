@@ -127,20 +127,20 @@ public class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Login with invalid credentials")
-    void testLoginWithInvalidCredentials() throws Exception {
-        LoginRequestDTO loginRequest = new LoginRequestDTO("invaliduser@example.com", "wrongpassword");
+    @DisplayName( "Login with invalid credentials" )
+    void testLoginWithInvalidCredentials( ) throws Exception {
+        LoginRequestDTO loginRequest = new LoginRequestDTO( "invaliduser@example.com", "wrongpassword" );
 
-        User user = new User();
-        user.setEmail(loginRequest.email());
-        user.setPassword("encodedPassword");
+        User user = new User( );
+        user.setEmail( loginRequest.email( ) );
+        user.setPassword( "encodedPassword" );
 
-        when(userRepository.findByEmail(loginRequest.email())).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches(loginRequest.password(), user.getPassword())).thenReturn(false);
+        when( userRepository.findByEmail( loginRequest.email( ) ) ).thenReturn( Optional.of( user ) );
+        when( passwordEncoder.matches( loginRequest.password( ), user.getPassword( ) ) ).thenReturn( false );
 
-        mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"invaliduser@example.com\", \"password\": \"wrongpassword\"}"))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform( post( "/api/auth/login" )
+                        .contentType( MediaType.APPLICATION_JSON )
+                        .content( "{\"email\": \"invaliduser@example.com\", \"password\": \"wrongpassword\"}" ) )
+                .andExpect( status( ).isBadRequest( ) );
     }
 }
