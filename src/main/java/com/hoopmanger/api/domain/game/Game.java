@@ -37,7 +37,4 @@ public class Game {
     private String location;
 
     private UUID team_id;
-
-    //@OneToMany
-    //private Set<GameInfo> infos;
 }
