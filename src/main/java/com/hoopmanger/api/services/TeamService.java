@@ -52,7 +52,7 @@ public class TeamService {
 
     public Team updateTeam( UUID teamId, TeamUpdateRequestDTO teamUpdateRequestDTO ) {
         Team team = teamRepository.findById( teamId ).orElse( null );
-        if ( teamId == null ) {
+        if ( team == null ) {
             return null;
         }
         team.setName( teamUpdateRequestDTO.name( ) );

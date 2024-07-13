@@ -62,7 +62,7 @@ public class PlayerService {
 
     public Player updatePlayer( UUID playerId, PlayerUpdateRequestDTO playerUpdateRequestDTO ) {
         Player player = playerRepository.findById( playerId ).orElse( null );
-        if ( playerId == null ) {
+        if ( player == null ) {
             return null;
         }
         player.setName( playerUpdateRequestDTO.name( ) );
