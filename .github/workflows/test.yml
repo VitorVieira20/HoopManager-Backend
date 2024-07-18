@@ -20,9 +20,25 @@ jobs:
       SPRING_DATASOURCE_PASSWORD: VitorSuperUser@@20
       SERVER_PORT: 8081
       TOKEN_SECRET_KEY: 563bdb82034470d3a7dd21676545e3c0cbfa4b297cb2ca7024f2bdf70742378b
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: hoopmanagerdb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: VitorSuperUser@@20
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Wait for PostgreSQL to be ready
+        run: until pg_isready -h localhost -p 5432; do echo "Waiting for PostgreSQL..."; sleep 1; done
       - name: Setup Java JDK
         uses: actions/setup-java@v3
         with:
