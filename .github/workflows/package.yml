@@ -11,6 +11,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/hoopmanagerdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: VitorSuperUser@@20
+      SERVER_PORT: 8081
+      TOKEN_SECRET_KEY: 563bdb82034470d3a7dd21676545e3c0cbfa4b297cb2ca7024f2bdf70742378b
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
